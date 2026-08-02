@@ -11,6 +11,19 @@ async function sendMagicLink(email) {
   return error;
 }
 
+// Sends a magic link and attaches enrollment details (name, church, phone)
+// as user metadata, so the dashboard can pick them up on first login.
+async function sendMagicLinkWithDetails(email, details) {
+  const { error } = await supabaseClient.auth.signInWithOtp({
+    email: email,
+    options: {
+      emailRedirectTo: `${SITE_URL}/dashboard.html`,
+      data: details, // { full_name, church_name, phone }
+    },
+  });
+  return error;
+}
+
 // Returns the current logged-in user, or null
 async function getCurrentUser() {
   const { data: { user } } = await supabaseClient.auth.getUser();
@@ -47,35 +60,6 @@ async function markModuleComplete(moduleNumber) {
   return { error };
 }
 
-// Returns the current user's profile row (full_name, church_name, etc), or null
-async function getProfile() {
-  const user = await getCurrentUser();
-  if (!user) return null;
-
-  const { data, error } = await supabaseClient
-    .from("profiles")
-    .select("full_name, church_name, denomination")
-    .eq("id", user.id)
-    .single();
-
-  if (error) return null;
-  return data;
-}
-
-// Saves the pastor's name (and optionally church) to their profile row
-async function saveProfileName(fullName, churchName) {
-  const user = await getCurrentUser();
-  if (!user) return { error: "not logged in" };
-
-  const updates = { id: user.id, full_name: fullName };
-  if (churchName !== undefined) updates.church_name = churchName;
-
-  const { error } = await supabaseClient
-    .from("profiles")
-    .upsert(updates, { onConflict: "id" });
-  return { error };
-}
-
 // Returns an array of module numbers the current user has completed, e.g. [1, 2]
 async function getCompletedModules() {
   const user = await getCurrentUser();
@@ -88,4 +72,32 @@ async function getCompletedModules() {
 
   if (error || !data) return [];
   return data.map((row) => row.module_number);
+}
+
+// Returns the current user's profile row (full_name, church_name, etc), or null
+async function getProfile() {
+  const user = await getCurrentUser();
+  if (!user) return null;
+
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("full_name, church_name, denomination, phone, role_title, years_ministry, credentials")
+    .eq("id", user.id)
+    .single();
+
+  if (error) return null;
+  return data;
+}
+
+// Saves any subset of profile fields for the current user.
+// Pass an object like { full_name, church_name, phone, role_title, years_ministry, credentials }
+async function saveProfile(fields) {
+  const user = await getCurrentUser();
+  if (!user) return { error: "not logged in" };
+
+  const updates = { id: user.id, ...fields };
+  const { error } = await supabaseClient
+    .from("profiles")
+    .upsert(updates, { onConflict: "id" });
+  return { error };
 }
