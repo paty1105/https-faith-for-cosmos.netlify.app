@@ -38,10 +38,27 @@
       <textarea placeholder="Write your reflection here..."></textarea>
     </div>
 
+    <div class="check-question" data-correct-msg="Right. The module frames it as a creation question first, a threat question second, if ever." data-incorrect-msg="Look back at section 2, the pastors with the most stability made a specific move first.">
+      <p class="question-text">Quick check: According to this module, what move did the most theologically stable pastors make first when approaching UAP/NHI?</p>
+      <div class="mc-options">
+        <label><input type="radio" name="m1q1" value="a"> They treated it primarily as a threat to be guarded against</label>
+        <label><input type="radio" name="m1q1" value="b"> They treated it as a creation question before treating it as a threat question</label>
+        <label><input type="radio" name="m1q1" value="c"> They avoided forming any position at all</label>
+      </div>
+      <button class="check-btn" onclick="checkMC(this, 'b')">Check Answer</button>
+      <p class="feedback"></p>
+    </div>
+
     <h2>3. Human Limitation as a Theological Starting Point</h2>
     <p>Job 38 through 41 is God's answer to a man demanding explanations, and the answer is essentially a tour of everything Job does not understand and was never in a position to understand. Where were you when I laid the foundations of the earth. The pastors in this study who were most comfortable saying "I don't know" to a congregant were, without exception, the ones who had made peace with the fact that Scripture itself models epistemic humility as a form of faithfulness, not a failure of it.</p>
     <p>This matters because your congregants are not actually asking you to resolve the UAP question. Most of them already sense that nobody can. What they are asking, underneath the surface question, is whether their faith has room for genuine mystery, or whether admitting uncertainty on your part will make them doubt everything else you have taught them.</p>
     <p>It will not, if you frame it correctly. Uncertainty about a specific phenomenon is not the same as uncertainty about the character of God. You can hold those two things with very different confidence levels at the same time, and part of your job in this module is getting comfortable naming that difference out loud.</p>
+
+    <div class="blank-wrapper">
+      <p>Fill in the blank: Scripture itself models epistemic <input type="text" class="blank-input" data-answer="humility" placeholder="your answer"> as a form of faithfulness, not a failure of it.</p>
+      <button class="check-btn" onclick="checkBlank(this)">Check</button>
+      <p class="feedback"></p>
+    </div>
 
     <h2>4. The Deception Question</h2>
     <p>This is where most pastors in the study reported the most internal tension, and it is worth naming directly rather than softening it. Scripture is not silent on the possibility of deceptive spiritual activity. 2 Corinthians 11:14 warns that Satan disguises himself as an angel of light. Matthew 24:24 warns of false christs and false prophets performing great signs and wonders, sufficient to deceive, if possible, even the elect.</p>
@@ -61,6 +78,19 @@
       "My skeptical reflex is: it's political theater, made to distract from other things going on in the world."
       <cite>Protestant Pastor, Study Participant</cite>
     </blockquote>
+
+    <div class="dropdown-wrapper">
+      <p>Quick check: According to Module I, the operative posture toward the deception question should be
+        <select class="dropdown-input" data-answer="discernment" onchange="checkDropdown(this)">
+          <option value="">Choose...</option>
+          <option value="suspicion">default suspicion</option>
+          <option value="discernment">ongoing discernment</option>
+          <option value="silence">pastoral silence</option>
+        </select>
+        rather than the alternatives.
+      </p>
+      <p class="feedback"></p>
+    </div>
 
     <h2>6. Closing the Module</h2>
     <p>You are not being asked to resolve, in an afternoon, a question theologians and scientists have not resolved. You are being asked to know where you stand well enough that a congregant leaves your office more settled than they arrived, not because you gave them certainty you do not have, but because you gave them a pastor who was not afraid of the question.</p>
@@ -85,6 +115,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/supabase-client.js"></script>
 <script src="../js/auth.js"></script>
+<script src="../js/interactive.js"></script>
 <script>
   const MODULE_NUMBER = 1;
 
