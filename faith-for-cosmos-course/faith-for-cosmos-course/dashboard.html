@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Course | Faith for the Cosmos</title>
+<link rel="stylesheet" href="css/course.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="top-nav">
+    <span id="welcome-msg">Welcome</span>
+    <a href="#" onclick="signOut(); return false;">Sign out</a>
+  </div>
+
+  <h1>Faith for the Cosmos</h1>
+  <p>A Pastor's Guide to Mystery, UAP, and the Questions Your Congregation Is Already Asking. Four modules, roughly ten hours, at your own pace.</p>
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+  </div>
+  <p id="progress-text" style="margin-top: -20px; font-size: 0.85rem;"></p>
+
+  <div id="module-list"></div>
+
+  <div class="card" id="certificate-card" style="display: none; text-align: center; border-color: var(--accent);">
+    <h3>Course Complete</h3>
+    <p>You've completed all four modules. Your certificate of completion is ready.</p>
+    <button onclick="downloadCertificate()">Download Certificate</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  const MODULES = [
+    { number: 1, title: "Theological Grounding", subtitle: "Creation, discernment, and the deception question", href: "modules/module-1.html" },
+    { number: 2, title: "The Pastoral Posture", subtitle: "Reassurance without dismissal", href: "modules/module-2.html" },
+    { number: 3, title: "Ministering to Experiencers", subtitle: "Walking alongside congregants with encounters of their own", href: "modules/module-3.html" },
+    { number: 4, title: "Your Response Protocol", subtitle: "A practicum to shape your own church's path forward", href: "modules/module-4.html" },
+  ];
+
+  let currentUser = null;
+
+  (async () => {
+    currentUser = await requireAuth();
+    if (!currentUser) return;
+
+    document.getElementById("welcome-msg").textContent = "Welcome, " + currentUser.email;
+
+    const completed = await getCompletedModules();
+    renderModules(completed);
+    renderProgress(completed);
+
+    if (completed.length === 4) {
+      document.getElementById("certificate-card").style.display = "block";
+    }
+  })();
+
+  function renderModules(completed) {
+    const list = document.getElementById("module-list");
+    list.innerHTML = "";
+
+    MODULES.forEach((mod) => {
+      const isComplete = completed.includes(mod.number);
+      const card = document.createElement("div");
+      card.className = "card module-card";
+      card.innerHTML = `
+        <div>
+          <h3 style="margin: 0 0 4px;">Module ${mod.number}: ${mod.title}</h3>
+          <p style="margin: 0;">${mod.subtitle}</p>
+        </div>
+        <div style="text-align: right;">
+          <span class="status ${isComplete ? "complete" : "pending"}">${isComplete ? "Complete" : "Not started"}</span>
+          <br><br>
+          <a class="btn" href="${mod.href}">${isComplete ? "Review" : "Begin"}</a>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function renderProgress(completed) {
+    const pct = (completed.length / MODULES.length) * 100;
+    document.getElementById("progress-fill").style.width = pct + "%";
+    document.getElementById("progress-text").textContent =
+      `${completed.length} of ${MODULES.length} modules complete`;
+  }
+
+  function downloadCertificate() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "letter" });
+
+    const name = currentUser.user_metadata?.full_name || currentUser.email;
+    const dateStr = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+    doc.setDrawColor(180, 150, 90);
+    doc.setLineWidth(3);
+    doc.rect(30, 30, 732, 552);
+
+    doc.setFont("times", "italic");
+    doc.setFontSize(16);
+    doc.text("Certificate of Completion", 396, 120, { align: "center" });
+
+    doc.setFont("times", "normal");
+    doc.setFontSize(28);
+    doc.text("Faith for the Cosmos", 396, 165, { align: "center" });
+
+    doc.setFontSize(13);
+    doc.text("A Pastor's Guide to Mystery, UAP, and the Questions", 396, 195, { align: "center" });
+    doc.text("Your Congregation Is Already Asking", 396, 213, { align: "center" });
+
+    doc.setFontSize(14);
+    doc.text("This certifies that", 396, 260, { align: "center" });
+
+    doc.setFont("times", "bolditalic");
+    doc.setFontSize(24);
+    doc.text(name, 396, 300, { align: "center" });
+
+    doc.setFont("times", "normal");
+    doc.setFontSize(13);
+    doc.text("has completed approximately 10 hours of documented professional development", 396, 335, { align: "center" });
+    doc.text("across four modules of doctoral-research-based clergy training.", 396, 353, { align: "center" });
+
+    doc.setFontSize(11);
+    doc.text(
+      "Many denominations recognize independent study toward continuing education",
+      396, 385, { align: "center" }
+    );
+    doc.text(
+      "requirements at the discretion of your supervisor or board.",
+      396, 400, { align: "center" }
+    );
+
+    doc.setFontSize(12);
+    doc.text("Date: " + dateStr, 200, 480, { align: "center" });
+    doc.text("Dr. Christian Pedersen", 596, 480, { align: "center" });
+    doc.setLineWidth(0.5);
+    doc.line(120, 465, 280, 465);
+    doc.line(516, 465, 676, 465);
+    doc.setFontSize(9);
+    doc.text("Date", 200, 495, { align: "center" });
+    doc.text("Course Instructor", 596, 495, { align: "center" });
+
+    doc.save("Faith-for-the-Cosmos-Certificate.pdf");
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In | Faith for the Cosmos</title>
+<link rel="stylesheet" href="css/course.css">
+</head>
+<body>
+<div class="wrap narrow">
+  <h1>Faith for the Cosmos</h1>
+  <p>Enter your email and we'll send you a secure sign-in link. No password needed.</p>
+
+  <div class="card" id="login-card">
+    <input type="email" id="email" placeholder="you@yourchurch.org" autocomplete="email">
+    <button id="send-link-btn" onclick="handleSendLink()">Send me a login link</button>
+    <p id="msg"></p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  // If already logged in, skip straight to the dashboard
+  (async () => {
+    const user = await getCurrentUser();
+    if (user) window.location.href = "dashboard.html";
+  })();
+
+  async function handleSendLink() {
+    const email = document.getElementById("email").value.trim();
+    const msg = document.getElementById("msg");
+    const btn = document.getElementById("send-link-btn");
+
+    if (!email || !email.includes("@")) {
+      msg.textContent = "Please enter a valid email address.";
+      msg.className = "error-msg";
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Sending...";
+
+    const error = await sendMagicLink(email);
+
+    if (error) {
+      msg.textContent = "Something went wrong: " + error.message;
+      msg.className = "error-msg";
+      btn.disabled = false;
+      btn.textContent = "Send me a login link";
+    } else {
+      msg.textContent = "Check your email. Click the link we sent to sign in.";
+      msg.className = "success-msg";
+      btn.textContent = "Link sent";
+    }
+  }
+</script>
+</body>
+</html>
