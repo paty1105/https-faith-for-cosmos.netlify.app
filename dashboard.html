@@ -16,6 +16,14 @@
   <h1>Faith for the Cosmos</h1>
   <p>A Pastor's Guide to Mystery, UAP, and the Questions Your Congregation Is Already Asking. Four modules, roughly ten hours, at your own pace.</p>
 
+  <div class="card" id="name-card" style="display: none; border-color: var(--accent);">
+    <h3 style="margin-top: 0;">Before You Begin</h3>
+    <p>What name should appear on your certificate of completion?</p>
+    <input type="text" id="full-name-input" placeholder="Full name">
+    <button onclick="handleSaveName()">Save</button>
+    <p id="name-msg"></p>
+  </div>
+
   <div class="progress-bar">
     <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
   </div>
@@ -43,12 +51,18 @@
   ];
 
   let currentUser = null;
+  let currentProfile = null;
 
   (async () => {
     currentUser = await requireAuth();
     if (!currentUser) return;
 
     document.getElementById("welcome-msg").textContent = "Welcome, " + currentUser.email;
+
+    currentProfile = await getProfile();
+    if (!currentProfile || !currentProfile.full_name) {
+      document.getElementById("name-card").style.display = "block";
+    }
 
     const completed = await getCompletedModules();
     renderModules(completed);
@@ -58,6 +72,27 @@
       document.getElementById("certificate-card").style.display = "block";
     }
   })();
+
+  async function handleSaveName() {
+    const input = document.getElementById("full-name-input");
+    const msg = document.getElementById("name-msg");
+    const name = input.value.trim();
+
+    if (!name) {
+      msg.textContent = "Please enter your name.";
+      msg.className = "error-msg";
+      return;
+    }
+
+    const { error } = await saveProfileName(name);
+    if (error) {
+      msg.textContent = "Something went wrong, try again.";
+      msg.className = "error-msg";
+    } else {
+      currentProfile = { ...currentProfile, full_name: name };
+      document.getElementById("name-card").style.display = "none";
+    }
+  }
 
   function renderModules(completed) {
     const list = document.getElementById("module-list");
@@ -93,7 +128,7 @@
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "letter" });
 
-    const name = currentUser.user_metadata?.full_name || currentUser.email;
+    const name = (currentProfile && currentProfile.full_name) || currentUser.email;
     const dateStr = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
     doc.setDrawColor(180, 150, 90);
