@@ -36,6 +36,12 @@
 
     <p><strong>Practical framing to try:</strong> Instead of "don't worry," try "I can see why that would unsettle you, let's think about it together." Instead of "that's not important," try "tell me more about what's underneath this question for you."</p>
 
+    <div class="blank-wrapper">
+      <p>Fill in the blank: Reassurance that dismisses says this isn't important. Reassurance that does not minimize says this <input type="text" class="blank-input" data-answer="matters" placeholder="your answer"> enough that I'm going to sit here with you in it.</p>
+      <button class="check-btn" onclick="checkBlank(this)">Check</button>
+      <p class="feedback"></p>
+    </div>
+
     <h2>3. Discernment Instead of Fear</h2>
     <p>Module I laid the theological groundwork on deception. Here is the pastoral application: discernment and fear are not the same posture, even though they can look similar from the outside for the first few seconds of a conversation.</p>
     <p>Fear says: this is dangerous, stay away from it, don't engage. Discernment says: let's look at this carefully, weigh it against what we know to be true, and stay grounded while we do. A congregant can usually tell within the first minute which one they're getting, because fear tends to close a conversation down and discernment tends to open it up.</p>
@@ -45,6 +51,17 @@
       "Don't be led by fear. Stay curious: let go of judgment and live in the realm of possibility."
       <cite>Protestant Pastor, Study Participant</cite>
     </blockquote>
+
+    <div class="check-question" data-correct-msg="Right. Fear closes a conversation down; discernment opens it up, even though both can look similar for the first few seconds." data-incorrect-msg="Look back at section 3, the module names a specific difference in how each one behaves in conversation.">
+      <p class="question-text">Quick check: What's the key difference between fear and discernment, according to this module?</p>
+      <div class="mc-options">
+        <label><input type="radio" name="m2q1" value="a"> Fear tends to close a conversation down; discernment tends to open it up</label>
+        <label><input type="radio" name="m2q1" value="b"> Fear and discernment are simply two words for the same posture</label>
+        <label><input type="radio" name="m2q1" value="c"> Discernment always requires taking a firm theological stance immediately</label>
+      </div>
+      <button class="check-btn" onclick="checkMC(this, 'a')">Check Answer</button>
+      <p class="feedback"></p>
+    </div>
 
     <h2>4. Keeping Core Beliefs at the Center</h2>
     <p>One risk in this territory is letting a UAP conversation pull you into speculative debate you were never equipped to have and were never meant to have. You are not required to have a position on propulsion technology, government transparency, or the physical nature of unidentified craft. You are a pastor, not a subject matter expert on aerospace or intelligence disclosure.</p>
@@ -56,6 +73,19 @@
     </blockquote>
 
     <p><strong>A useful phrase for redirecting without dismissing:</strong> "I don't have expertise in the technical side of this, and I want to be honest about that. What I can speak to is how we hold uncertainty as people of faith, and I'd like to do that with you."</p>
+
+    <div class="dropdown-wrapper">
+      <p>Quick check: This module says you are not required to have a position on
+        <select class="dropdown-input" data-answer="propulsion" onchange="checkDropdown(this)">
+          <option value="">Choose...</option>
+          <option value="propulsion">propulsion technology or government disclosure</option>
+          <option value="theology">the character of God</option>
+          <option value="care">pastoral care itself</option>
+        </select>
+        , since that's outside your role as a pastor.
+      </p>
+      <p class="feedback"></p>
+    </div>
 
     <h2>5. Practicing the Posture</h2>
     <p>Read the two sample openings below. Both are responses to a congregant who says, "Pastor, I saw something in the news about this UAP hearing and it's really shaken me. What if we're not alone, and what does that mean for everything I believe?"</p>
@@ -90,6 +120,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/supabase-client.js"></script>
 <script src="../js/auth.js"></script>
+<script src="../js/interactive.js"></script>
 <script>
   const MODULE_NUMBER = 2;
 
