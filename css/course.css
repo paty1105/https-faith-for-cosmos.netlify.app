@@ -169,6 +169,94 @@ input[type="email"], input[type="text"] {
 .error-msg { color: #d47a7a; font-size: 0.9rem; }
 .success-msg { color: var(--success); font-size: 0.9rem; }
 
+/* Interactive self-check questions */
+.check-question {
+  background: var(--bg-card);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin: 2em 0;
+}
+
+.check-question .question-text {
+  color: var(--text);
+  font-weight: 600;
+  margin-top: 0;
+  font-family: var(--font-ui);
+}
+
+.check-question .mc-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.check-question .mc-options label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.check-question .mc-options input[type="radio"] {
+  margin-top: 3px;
+}
+
+.check-btn {
+  padding: 8px 18px;
+  font-size: 0.9rem;
+}
+
+.feedback {
+  margin-top: 10px;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  min-height: 1.2em;
+}
+
+.correct-msg { color: var(--success); }
+.incorrect-msg { color: #d47a7a; }
+
+.blank-wrapper, .dropdown-wrapper {
+  background: var(--bg-card);
+  border-left: 3px solid var(--accent-dim);
+  border-radius: 4px;
+  padding: 16px 24px;
+  margin: 1.5em 0;
+}
+
+.blank-wrapper p, .dropdown-wrapper p {
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  margin-top: 0;
+}
+
+.blank-input {
+  display: inline-block;
+  width: auto;
+  min-width: 140px;
+  padding: 6px 10px;
+  margin: 0 6px;
+  font-family: var(--font-ui);
+}
+
+.dropdown-input {
+  display: inline-block;
+  width: auto;
+  padding: 6px 10px;
+  margin: 0 6px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-ui);
+}
+
 .progress-bar {
   background: var(--border);
   border-radius: 20px;
