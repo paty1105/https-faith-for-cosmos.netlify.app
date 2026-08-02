@@ -33,11 +33,28 @@
       <cite>Protestant Pastor, Study Participant</cite>
     </blockquote>
 
+    <div class="check-question" data-correct-msg="Right. Your job early on is to walk with them through the fear stage, not to land on a conclusion right away." data-incorrect-msg="Look back at section 2, the module is specific about what your job is NOT in the early conversations.">
+      <p class="question-text">Quick check: What is your job in the early conversations with an experiencer, according to this module?</p>
+      <div class="mc-options">
+        <label><input type="radio" name="m3q1" value="a"> To resolve the meaning of the experience as quickly as possible</label>
+        <label><input type="radio" name="m3q1" value="b"> To walk with the person through the fear stage without rushing them toward a conclusion</label>
+        <label><input type="radio" name="m3q1" value="c"> To determine whether the experience was demonic before anything else</label>
+      </div>
+      <button class="check-btn" onclick="checkMC(this, 'b')">Check Answer</button>
+      <p class="feedback"></p>
+    </div>
+
     <h2>3. What Not to Do First</h2>
     <p>Two responses showed up repeatedly in the research as ones that damaged trust when they came too early, before the pastor had actually heard the full story.</p>
     <p><strong>Naming the category before hearing the whole story.</strong> Whether the conclusion is demonic, angelic, a hoax, or something else entirely, offering that interpretation in the first minutes of a disclosure, before you understand what the person actually experienced, tends to foreclose the conversation. It is not that any particular theological conclusion is off the table. It is that arriving at one before you have listened puts the interpretation ahead of the person, and congregants in this study consistently described feeling unheard when that happened, regardless of what conclusion their pastor landed on.</p>
     <p><strong>The clinical redirect.</strong> Immediately suggesting the person see a therapist or psychiatrist, without first offering pastoral presence, can communicate that you've decided their experience was a symptom before you've heard them out. This does not mean referral is never appropriate. It means referral should follow listening, not replace it.</p>
     <p><strong>What worked instead</strong>, according to the pastors who navigated this well: slow down, ask questions before offering interpretation, and let the person set the pace of how much theological or clinical weight gets attached to what they experienced. You may well land on a demonic interpretation, or any other interpretation, later in the conversation. The research suggests that landing there is far less damaging than arriving there first.</p>
+
+    <div class="blank-wrapper">
+      <p>Fill in the blank: The research suggests that arriving at a category too early puts the interpretation ahead of the <input type="text" class="blank-input" data-answer="person" placeholder="your answer">.</p>
+      <button class="check-btn" onclick="checkBlank(this)">Check</button>
+      <p class="feedback"></p>
+    </div>
 
     <h2>4. When to Refer</h2>
     <p>Pastoral presence is not a substitute for clinical care when clinical care is warranted, and part of ministering well here is knowing the difference.</p>
@@ -49,6 +66,19 @@
       <li>Your own discernment tells you this has moved beyond what pastoral care alone can address</li>
     </ul>
     <p>A referral offered with care, "I want you to have every kind of support available, and I think a counselor could help alongside what we're doing here," lands very differently than a referral offered as an exit from the conversation.</p>
+
+    <div class="dropdown-wrapper">
+      <p>Quick check: According to this module, a referral should be offered
+        <select class="dropdown-input" data-answer="alongside" onchange="checkDropdown(this)">
+          <option value="">Choose...</option>
+          <option value="alongside">alongside your continued pastoral support</option>
+          <option value="instead">instead of your continued pastoral support</option>
+          <option value="never">only if the person explicitly requests it</option>
+        </select>
+        , not as a replacement for it.
+      </p>
+      <p class="feedback"></p>
+    </div>
 
     <h2>5. The Social Tension Question</h2>
     <p>Several pastors in the study described a second-order challenge: once an experiencer's story becomes known within the congregation, even inadvertently, it can create tension. Some members respond with curiosity or support. Others respond with suspicion toward the experiencer, or discomfort that their pastor is engaging with the topic at all rather than shutting it down.</p>
@@ -90,6 +120,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/supabase-client.js"></script>
 <script src="../js/auth.js"></script>
+<script src="../js/interactive.js"></script>
 <script>
   const MODULE_NUMBER = 3;
 
