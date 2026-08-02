@@ -47,6 +47,35 @@ async function markModuleComplete(moduleNumber) {
   return { error };
 }
 
+// Returns the current user's profile row (full_name, church_name, etc), or null
+async function getProfile() {
+  const user = await getCurrentUser();
+  if (!user) return null;
+
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("full_name, church_name, denomination")
+    .eq("id", user.id)
+    .single();
+
+  if (error) return null;
+  return data;
+}
+
+// Saves the pastor's name (and optionally church) to their profile row
+async function saveProfileName(fullName, churchName) {
+  const user = await getCurrentUser();
+  if (!user) return { error: "not logged in" };
+
+  const updates = { id: user.id, full_name: fullName };
+  if (churchName !== undefined) updates.church_name = churchName;
+
+  const { error } = await supabaseClient
+    .from("profiles")
+    .upsert(updates, { onConflict: "id" });
+  return { error };
+}
+
 // Returns an array of module numbers the current user has completed, e.g. [1, 2]
 async function getCompletedModules() {
   const user = await getCurrentUser();
